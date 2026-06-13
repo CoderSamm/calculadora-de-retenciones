@@ -1,0 +1,251 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+
+
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+
+}
+
+h1 {
+  
+  text-align: center;
+  color: white;
+  margin: 10px 0 5px 0;
+
+}
+
+h2 {
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  margin: 0 0 10px 0;
+}
+
+h3{
+  text-align: left;
+  color: rgba(255, 255, 255, 0.8); 
+  margin: 0 0 10px 0;
+
+}
+
+.calculadora {
+  /* controlamos el tamaño de la tarjeta */
+  width: 100%;  
+  max-width: 350px; 
+  
+  margin: 50px auto;
+
+  padding: 20px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+}
+.contenedor {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* botones */
+.botones {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+
+  margin-top: 15px;
+}
+
+
+/* estilo para todos los botones en general */
+
+.btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 12px;
+  border: none;
+  padding: 14px;
+
+  cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.btn:hover {
+  transform: translateY(-px4) scale(1.04);
+  background: rgba(184, 131, 222, 0.833);
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+}
+
+/* efecto click */
+.btn:active {
+  transform: scale(0.97);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* destacar acciones importantes */
+
+
+.operador{
+  background: linear-gradient( 135deg, #6a6af5, #1a1a80);
+  box-shadow: 0 4px 20px rgba(80, 80, 231, 0.5);
+}
+
+.limpiar{
+  background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+  grid-column: span 2;
+  box-shadow: 0 6px 20px rgba(142, 84, 233, 0.6);
+}
+
+.limpiar:hover{
+  filter: brightness(1.2);
+  box-shadow: 0 12px 30px rgba(142, 84, 233, 0.9);
+}
+
+
+/* RESULTADOS */
+/* etiqueta label de los resultados */
+.label {
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.valor{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.resultado-item {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    color: white;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+    transition: all 0.25s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* hover elegante */
+.resultado-item:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* total destacado */
+.total-neto {
+    font-weight: bold;
+    font-size: 16px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+}
+
+#pantalla {
+  width: 80%;
+  padding: 16px;
+  margin: 15px 0;
+
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  text-align: right;
+  color: white;
+
+  /* 🔥 efecto glass */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+
+  /* 🔥 profundidad + glow suave */
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.4),
+    0 5px 20px rgba(0, 0, 0, 0.4);
+
+  outline: none;
+
+  transition: all 0.25s ease;
+}
+
+#pantalla:focus {
+  border: 1px solid rgba(0, 212, 255, 0.8);
+
+  box-shadow:
+    0 0 12px rgba(0, 212, 255, 0.7),
+    inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+#pantalla::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* signo peso */
+.campo-monetario {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+
+.simbolo {
+  position: absolute;
+  left: 12px;
+  color: rgba(255,255,255,0.6);
+  font-size: 18px;
+}
+
+#pantalla {
+  padding-left: 25px;
+}
+
+@media (max-width: 480px) {
+
+  .calculadora {
+    padding: 15px;
+  }
+
+  .btn {
+    padding: 10px;
+  }
+
+}

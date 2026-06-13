@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="calculadora">
+        <h1>Calculadora de Retenciones</h1>
+    <div class="campo-monetario">
+        <span class="simbolo">$</span>
+        <input type="text" id="pantalla" inputmode="numeric">
+    </div>
+
+
+        <div class="botones">   
+            <button class="btn operador" onclick="reteFuente()">FUENTE</button>
+            <button class="btn operador" onclick="reteFuenteIva()">FUENTE + IVA</button>
+            <button class="btn operador" onclick="totalRetenciones()">FUENTE + IVA + ICA</button>
+            <button class="btn limpiar" onclick="limpiarTodo()">LIMPIAR</button>
+        </div>
+
+        <div class="contenedor">  
+            <div class="resultado-item" id="valor-subtotal"></div>
+            <div class="resultado-item" id="valor-iva"></div>
+            <div class="resultado-item" id="valor-retefuente"></div>
+            <div class="resultado-item" id="valor-reteiva"></div>
+            <div class="resultado-item" id="valor-reteica"></div>
+            <div class="resultado-item" id="valor-total"></div>
+            <div class="resultado-item total-neto" id="valor-total-neto"></div>
+        </div>
+    </div>
+    <script src="codigo.js"></script>
+</body>
+
+</html>
