@@ -4,8 +4,7 @@ function obtenerTotalDesdePantalla() {
 
     // validar vacío
     if (!valorPantalla || valorPantalla.trim() === '') {
-        pantalla.value = '0';
-        return null;
+        return null; // 👈 NO forzamos a cero
     }
 
     // calcular
@@ -37,6 +36,88 @@ const elementos = {
     'valor-reteica': document.getElementById('valor-reteica'),
     'valor-total-neto': document.getElementById('valor-total-neto')
 };
+
+
+//Añadimos acumulables en caso queramos sacar retenciones una a una 
+
+let estadoCalculo = {
+    total: null,
+    subtotal: 0,
+    iva: 0,
+    retefuente: 0,
+    reteiva: 0,
+    reteica: 0
+}
+
+//memoria de resultados
+function inicializarEstado(){
+    const total = obtenerTotalDesdePantalla()
+    if(total === null) return;
+
+    if(estadoCalculo.total !== total){
+        const {subtotal, iva} = calcularBase(total);
+
+        estadoCalculo = {
+            total: total,
+            subtotal: subtotal,
+            iva: iva,
+            retefuente: 0,
+            reteiva: 0,
+            reteica: 0
+        }
+    }
+    return estadoCalculo;
+}
+
+//Funcion para mostrar resultados en pantalla
+
+function renderizarEstado(){
+    const totalRetenciones = 
+    estadoCalculo.retefuente +
+    estadoCalculo.reteiva +
+    estadoCalculo.reteica;
+
+    const totalNeto = estadoCalculo.total - totalRetenciones;
+
+    const datos = crearDatosBase({
+        total: estadoCalculo.total,
+        subtotal: estadoCalculo.subtotal,
+        iva: estadoCalculo.iva
+    })
+
+    
+    if (estadoCalculo.retefuente > 0) {
+        datos.push({
+            id: 'valor-retefuente',
+            etiqueta: 'ReteFuente',
+            valor: estadoCalculo.retefuente
+        });
+    }
+
+    if(estadoCalculo.reteiva > 0){
+        datos.push({
+            id: 'valor-reteiva',
+            etiqueta: 'ReteIva',
+            valor: estadoCalculo.reteiva
+        });
+    }
+    if(estadoCalculo.reteica > 0){
+        datos.push({
+            id: 'valor-reteica',
+            etiqueta: 'ReteIca',
+            valor: estadoCalculo.reteica
+        });
+    }
+
+    datos.push({
+        id: 'valor-total-neto',
+        etiqueta: 'Total Neto',
+        valor: totalNeto
+    })
+
+    renderizarResultados(datos)
+
+}
 
 function calcularBase(total) {
     const subtotal = total / 1.19;
@@ -71,6 +152,7 @@ function crearDatosBase({total, subtotal, iva}) {
 }
 
 function renderizarResultados(datos){
+    limpiarCamposResultados(); // 👈 LIMPIA ANTES
     datos.forEach(item => {
         const elemento = elementos[item.id];
         if (!elemento) return;
@@ -80,7 +162,6 @@ function renderizarResultados(datos){
         elemento.textContent = `${item.etiqueta}: ${copFormat.format(valorSeguro)}`;
     });
 }
-
 
 
 function calcular(){
@@ -106,27 +187,37 @@ teclaEnter.addEventListener('keydown', function(evento){
 
 //RETENCION EN LA FUENTE
 
+//agregamos la opcion para guardarla en memoria
 function reteFuente(){
-    const total = obtenerTotalDesdePantalla();
-    if(total === null)return;
+    const estado = inicializarEstado();
 
-   const {
-    subtotal,
-    iva,
-    retefuente
-    } = calcularRetenciones(total);
+    if(!estado) return;
 
-    const totalNeto = total - retefuente
+    const {retefuente} = calcularRetenciones(estado.total)
 
-    const datos = crearDatosBase({total, subtotal, iva});
+    estadoCalculo.retefuente = retefuente
+    renderizarEstado(); // 👈 CLAVE 
+}
 
-     datos.push (
-        { id: 'valor-retefuente', etiqueta: 'ReteFuente', valor: retefuente },
-        { id: 'valor-total-neto', etiqueta: 'Total Neto', valor: totalNeto }
-     )
-       
-    renderizarResultados(datos);
+function reteIva() {
+    const estado = inicializarEstado();
+    if(!estado) return;
 
+    const {reteiva} = calcularRetenciones(estado.total)
+
+    estadoCalculo.reteiva = reteiva
+    renderizarEstado()
+
+}
+
+function reteIca() {
+    const estado = inicializarEstado();
+    if(!estado) return;
+
+    const {reteica} = calcularRetenciones(estado.total);
+
+    estadoCalculo.reteica = reteica
+    renderizarEstado();
 }
 
 function reteFuenteIva(){
@@ -142,7 +233,9 @@ function reteFuenteIva(){
 
     const totalNeto = total - retefuente - reteiva
 
-      const datos = crearDatosBase({total, subtotal, iva});
+    const datos = crearDatosBase({total, subtotal, iva});
+
+  
 
      datos.push (
         { id: 'valor-retefuente', etiqueta: 'ReteFuente', valor: retefuente },
@@ -182,15 +275,27 @@ function totalRetenciones(){
 
 //LIMPIAR PANTALLA Y RESULTADOS
 
+function limpiarCamposResultados() {
+    Object.values(elementos).forEach(elemento => {
+        if (elemento) {
+            elemento.textContent = '';
+        }
+    });
+}
+
 function limpiarTodo(){
 
-    //limpiar pantalla de calculadora
     const pantalla = document.getElementById('pantalla');
-    pantalla.value = ''
+    pantalla.value = '';
 
-    //limpiar resultados
+    estadoCalculo = {
+        total: null,
+        subtotal: 0,
+        iva: 0,
+        retefuente: 0,
+        reteiva: 0,
+        reteica: 0
+    };
 
-    Object.values(elementos).forEach(elemento=> {
-        elemento.textContent = '';
-    })
+    limpiarCamposResultados(); // 👈 aseguras que todo quede limpio
 }
